@@ -121,6 +121,10 @@ contract BananaNFT is ERC721Enumerable, Ownable {
         baseURI = _newBaseURI;
     }
 
+    function currentTokenId() public view returns (uint256) {
+        return _tokenIdCounter;
+    }
+
     function _getRandomLevel() private view returns (uint256) {
         uint256 rand = uint256(
             keccak256(

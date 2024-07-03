@@ -5,10 +5,11 @@ pragma solidity 0.8.26;
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 
-contract BananaNFT is ERC721Enumerable, Ownable {
+contract BananaNFT is  ERC721Enumerable, Ownable {
     using Strings for uint256;
 
     uint256 private _tokenIdCounter;
@@ -25,6 +26,7 @@ contract BananaNFT is ERC721Enumerable, Ownable {
     // 盲盒图片的meta,json地址，后文会提到
     string public notRevealedUri;
 
+    mapping(uint256 tokenId => string) public _tokenURIs;
     mapping(address => uint256) public lastMintTime;
     mapping(uint256 => uint256) public tokenLevels;
     mapping(address => bool) public isOnline;
@@ -43,14 +45,16 @@ contract BananaNFT is ERC721Enumerable, Ownable {
         saleEndTime = block.timestamp + duration;
     }
 
-    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-        require(_ownerOf(tokenId) != address(0), "ERC721Metadata: URI query for nonexistent token");
-        if (_revealed == false) {
-            return notRevealedUri;
-        }
-        string memory base = _baseURI();
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        _requireOwned(tokenId);
+        // if (_revealed == false) {
+        //     return notRevealedUri;
+        // }
+        string memory _tokenURI = _tokenURIs[tokenId];
+        return _tokenURI;
+        // string memory base = _baseURI();
 
-        return bytes(base).length > 0 ? string(abi.encodePacked(base, tokenId.toString())) : "";
+        // return bytes(base).length > 0 ? string(abi.encodePacked(base, tokenId.toString())) : "";
     }
 
     function mysteryBox() external payable {
@@ -68,18 +72,19 @@ contract BananaNFT is ERC721Enumerable, Ownable {
         emit Minted(msg.sender, tokenId, level);
     }
 
-    function mint(address user) external {
+    function mint(string memory uri) external {
         require(
-            block.timestamp >= lastMintTime[user] + mintInterval,
+            block.timestamp >= lastMintTime[msg.sender] + mintInterval,
             "Isnt mint time"
         );
-        require(isOnline[user], "You are not online");
+        require(isOnline[msg.sender], "You are not online");
         require(block.timestamp < saleEndTime, "Sale ended");
 
         ++_tokenIdCounter;
         uint256 tokenId = _tokenIdCounter;
-        lastMintTime[user] = block.timestamp;
+        lastMintTime[msg.sender] = block.timestamp;
         _safeMint(msg.sender, tokenId);
+        _setTokenURI(tokenId, uri);
 
         uint256 level = _getRandomLevel();
         tokenLevels[tokenId] = level;
@@ -97,9 +102,13 @@ contract BananaNFT is ERC721Enumerable, Ownable {
         isOnline[user] = false;
     }
 
-     function _baseURI() internal view virtual override returns (string memory) {
-        return baseURI;
+    function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual {
+        _tokenURIs[tokenId] = _tokenURI;
     }
+
+    // function _baseURI() internal view virtual override returns (string memory) {
+    //     return baseURI;
+    // }
    
     function flipSaleActive() external onlyOwner {
         _isSaleActive = !_isSaleActive;
@@ -117,9 +126,9 @@ contract BananaNFT is ERC721Enumerable, Ownable {
         notRevealedUri = _notRevealedURI;
     }
    
-    function setBaseURI(string memory _newBaseURI) external onlyOwner {
-        baseURI = _newBaseURI;
-    }
+    // function setBaseURI(string memory _newBaseURI) external onlyOwner {
+    //     baseURI = _newBaseURI;
+    // }
 
     function currentTokenId() public view returns (uint256) {
         return _tokenIdCounter;

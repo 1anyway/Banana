@@ -523,7 +523,7 @@
 		"compilationTarget": {
 			"contracts/BananaToken.sol": "BananaToken"
 		},
-		"evmVersion": "shanghai",
+		"evmVersion": "cancun",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"

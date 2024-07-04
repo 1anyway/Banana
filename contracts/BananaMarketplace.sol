@@ -10,6 +10,7 @@ import {BananaNFT} from "./BananaNFT.sol";
 contract BananaMarketplace is IERC721Receiver, Ownable {
     IERC20 public token;
     BananaNFT public bananaNFT;
+    bool isFloorSet;
     uint256 public burnRate = 5; // 5%
     
     struct Listing {
@@ -28,6 +29,9 @@ contract BananaMarketplace is IERC721Receiver, Ownable {
     }
 
     function listNFT(uint256 tokenId, uint256 price) external {
+        if (isFloorSet) {
+            require(price >=  1e20, "Floor price must greater than 100 token");
+        }
         require(bananaNFT.ownerOf(tokenId) == msg.sender, "Not owner");
         require(listings[tokenId].seller == address(0), "Already listed");
 
@@ -64,6 +68,10 @@ contract BananaMarketplace is IERC721Receiver, Ownable {
     function setBurnRate(uint256 _burnRate) external onlyOwner {
         require(_burnRate < 20, "Invalid _burnRate");
         burnRate = _burnRate;
+    }
+
+    function toggleIsFloorPrice() external onlyOwner {
+        isFloorSet = !isFloorSet;
     }
 
     function withdrawBurnedTokens() external onlyOwner {

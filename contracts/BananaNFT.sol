@@ -14,24 +14,23 @@ contract BananaNFT is ERC721Enumerable, Ownable {
     IERC20 public token;
     uint256 public mintPrice = 0.01 ether;
     uint256 public mintInterval;
-    uint256 public saleEndTime;
+    uint256 public endWhitelistMintTime;
     bool public _isSaleActive;
 
     mapping(uint256 tokenId => string) public _tokenURIs;
+    mapping(address => bool) whitelist;
     mapping(address => uint256) public lastMintTime;
 
     event Minted(address indexed user, uint256 tokenId);
 
     constructor(
         uint256 _mintInterval,
-        IERC20 _token
+        IERC20 _token,
+        uint256 whitelistMintTime
     ) ERC721("BananaNFT", "BNFT") Ownable(msg.sender) {
         mintInterval = _mintInterval;
         token = _token;
-    }
-
-    function startSale(uint256 duration) external onlyOwner {
-        saleEndTime = block.timestamp + duration;
+        endWhitelistMintTime = block.timestamp + whitelistMintTime;
     }
 
     function tokenURI(
@@ -44,7 +43,6 @@ contract BananaNFT is ERC721Enumerable, Ownable {
 
     function payToMint(string memory uri) external payable returns (uint256) {
         require(_isSaleActive, "Sale is not active");
-        require(block.timestamp < saleEndTime, "Sale ended");
         require(msg.value == mintPrice, "Incorrect ETH value");
 
         ++_tokenIdCounter;
@@ -60,8 +58,9 @@ contract BananaNFT is ERC721Enumerable, Ownable {
     function judgeMint() external view returns (uint256 nextMintTime) {
         if (lastMintTime[msg.sender] == 0) {
             nextMintTime = 0;
+        } else {
+            nextMintTime = lastMintTime[msg.sender] + mintInterval;
         }
-        nextMintTime = lastMintTime[msg.sender] + mintInterval;
     }
 
     function mint(string memory uri) external returns (uint256) {
@@ -69,6 +68,9 @@ contract BananaNFT is ERC721Enumerable, Ownable {
             block.timestamp >= lastMintTime[msg.sender] + mintInterval,
             "Not reach mint time"
         );
+        if (block.timestamp < endWhitelistMintTime) {
+            require(whitelist[msg.sender], "Only whitelist user can mint"); 
+        }
 
         ++_tokenIdCounter;
         uint256 tokenId = _tokenIdCounter;
@@ -79,6 +81,10 @@ contract BananaNFT is ERC721Enumerable, Ownable {
         emit Minted(msg.sender, tokenId);
 
         return tokenId;
+    }
+
+    function addToWhitelsit(address user) external {
+        whitelist[user] = true;
     }
 
     function _setTokenURI(

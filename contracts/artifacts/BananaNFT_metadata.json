@@ -231,12 +231,6 @@
 						"internalType": "uint256",
 						"name": "tokenId",
 						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "level",
-						"type": "uint256"
 					}
 				],
 				"name": "Minted",
@@ -300,13 +294,19 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "_revealed",
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					}
+				],
+				"name": "_tokenURIs",
 				"outputs": [
 					{
-						"internalType": "bool",
+						"internalType": "string",
 						"name": "",
-						"type": "bool"
+						"type": "string"
 					}
 				],
 				"stateMutability": "view",
@@ -360,13 +360,6 @@
 					}
 				],
 				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "flipReveal",
-				"outputs": [],
-				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -439,6 +432,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "judgeMint",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "nextMintTime",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -460,13 +466,19 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "user",
-						"type": "address"
+						"internalType": "string",
+						"name": "uri",
+						"type": "string"
 					}
 				],
 				"name": "mint",
-				"outputs": [],
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -498,27 +510,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "mysteryBox",
-				"outputs": [],
-				"stateMutability": "payable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "name",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "notRevealedUri",
 				"outputs": [
 					{
 						"internalType": "string",
@@ -559,6 +551,25 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "uri",
+						"type": "string"
+					}
+				],
+				"name": "payToMint",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
@@ -653,38 +664,12 @@
 			{
 				"inputs": [
 					{
-						"internalType": "string",
-						"name": "_newBaseURI",
-						"type": "string"
-					}
-				],
-				"name": "setBaseURI",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
 						"internalType": "uint256",
 						"name": "_mintPrice",
 						"type": "uint256"
 					}
 				],
 				"name": "setMintPrice",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "string",
-						"name": "_notRevealedURI",
-						"type": "string"
-					}
-				],
-				"name": "setNotRevealedURI",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -756,25 +741,6 @@
 					}
 				],
 				"name": "tokenByIndex",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "tokenLevels",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -873,32 +839,6 @@
 					}
 				],
 				"name": "transferOwnership",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "user",
-						"type": "address"
-					}
-				],
-				"name": "updateOnlineMintTime",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "user",
-						"type": "address"
-					}
-				],
-				"name": "updateOutlineMintTime",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -1084,13 +1024,13 @@
 		"compilationTarget": {
 			"contracts/BananaNFT.sol": "BananaNFT"
 		},
-		"evmVersion": "cancun",
+		"evmVersion": "shanghai",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": false,
+			"enabled": true,
 			"runs": 200
 		},
 		"remappings": []
@@ -1217,11 +1157,11 @@
 			]
 		},
 		"contracts/BananaNFT.sol": {
-			"keccak256": "0x3d73269ac38a8e65834c9c2a0b1d0e9a57fdc537308d33027053af2fb587083d",
+			"keccak256": "0x0b313e47fa68d2f0391e552b675adc70f345ee8fdbf3b55cb598eba1f35747e6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://1247d6c625ce4523099219a5b64aa083b535ca8bd2ac184d0a431332495fc7da",
-				"dweb:/ipfs/QmVZv23bf3f7CKiKu49f1KzF94tCcX6HFBupgcnCMU8jZo"
+				"bzz-raw://550ff60ef097c36915c06f839a04973afbd7c109cb3000a26ba8038afeb6e290",
+				"dweb:/ipfs/QmRgQw3XLYPt7hy7Gba2VvQzwp5D7KZimzCApoWSaF2jSK"
 			]
 		}
 	},

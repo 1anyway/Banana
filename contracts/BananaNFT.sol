@@ -19,7 +19,6 @@ contract BananaNFT is ERC721Enumerable, Ownable {
 
     mapping(uint256 tokenId => string) public _tokenURIs;
     mapping(address => uint256) public lastMintTime;
-    mapping(address => bool) public isOnline;
 
     event Minted(address indexed user, uint256 tokenId);
 
@@ -59,6 +58,9 @@ contract BananaNFT is ERC721Enumerable, Ownable {
     }
 
     function judgeMint() external view returns (uint256 nextMintTime) {
+        if (lastMintTime[msg.sender] == 0) {
+            nextMintTime = 0;
+        }
         nextMintTime = lastMintTime[msg.sender] + mintInterval;
     }
 

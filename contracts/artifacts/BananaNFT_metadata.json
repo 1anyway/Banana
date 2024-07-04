@@ -16,6 +16,11 @@
 						"internalType": "contract IERC20",
 						"name": "_token",
 						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "whitelistMintTime",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "nonpayable",
@@ -316,6 +321,19 @@
 				"inputs": [
 					{
 						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					}
+				],
+				"name": "addToWhitelsit",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
 						"name": "to",
 						"type": "address"
 					},
@@ -352,6 +370,19 @@
 			{
 				"inputs": [],
 				"name": "currentTokenId",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "endWhitelistMintTime",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -402,25 +433,6 @@
 					}
 				],
 				"name": "isApprovedForAll",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "isOnline",
 				"outputs": [
 					{
 						"internalType": "bool",
@@ -631,19 +643,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "saleEndTime",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -665,11 +664,11 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_mintPrice",
+						"name": "_mintInterval",
 						"type": "uint256"
 					}
 				],
-				"name": "setMintPrice",
+				"name": "setMintInterval",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -678,11 +677,11 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "duration",
+						"name": "_mintPrice",
 						"type": "uint256"
 					}
 				],
-				"name": "startSale",
+				"name": "setMintPrice",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -1157,11 +1156,11 @@
 			]
 		},
 		"contracts/BananaNFT.sol": {
-			"keccak256": "0x0b313e47fa68d2f0391e552b675adc70f345ee8fdbf3b55cb598eba1f35747e6",
+			"keccak256": "0x3ad020ef028f0fbb9e9bd51f0dc1cab1ba919fca11362d10d286d67722704f07",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://550ff60ef097c36915c06f839a04973afbd7c109cb3000a26ba8038afeb6e290",
-				"dweb:/ipfs/QmRgQw3XLYPt7hy7Gba2VvQzwp5D7KZimzCApoWSaF2jSK"
+				"bzz-raw://dab51c27a64fcfa71656dc451c489e27f0df25a3652bf311e1f9bf2e7312b32b",
+				"dweb:/ipfs/QmcNyRm77UT223m5HoKFggsrHgJS8U16rueB7qfEe3qQni"
 			]
 		}
 	},

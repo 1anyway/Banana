@@ -94,6 +94,10 @@ contract BananaNFT is ERC721Enumerable, Ownable {
         _tokenURIs[tokenId] = _tokenURI;
     }
 
+    function setMintInterval(uint256 _mintInterval) external onlyOwner {
+        mintInterval = _mintInterval;
+    }
+
     function flipSaleActive() external onlyOwner {
         _isSaleActive = !_isSaleActive;
     }

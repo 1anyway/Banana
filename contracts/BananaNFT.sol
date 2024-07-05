@@ -6,8 +6,9 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract BananaNFT is ERC721Enumerable, Ownable {
+contract BananaNFT is ERC721Enumerable, ReentrancyGuard, Ownable {
 
     uint256 private _tokenIdCounter;
 
@@ -41,7 +42,7 @@ contract BananaNFT is ERC721Enumerable, Ownable {
         return _tokenURI;
     }
 
-    function payToMint(string memory uri) external payable returns (uint256) {
+    function payToMint(string memory uri) external payable nonReentrant returns (uint256) {
         require(_isSaleActive, "Sale is not active");
         require(msg.value == mintPrice, "Incorrect ETH value");
 
@@ -63,7 +64,7 @@ contract BananaNFT is ERC721Enumerable, Ownable {
         }
     }
 
-    function mint(string memory uri) external returns (uint256) {
+    function mint(string memory uri) external nonReentrant returns (uint256) {
         require(
             block.timestamp >= lastMintTime[msg.sender] + mintInterval,
             "Not reach mint time"

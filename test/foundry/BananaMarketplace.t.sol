@@ -25,26 +25,8 @@ contract BananaNFTTest is Test {
 
     uint256 public mintInterval;
     uint256 public whitelistMintTime;
-
-    // IERC20 public token;
-    // BananaNFT public bananaNFT;
-    // bool isFloorSet;
-    // uint256 public floorPrice;
-    // uint256 public burnRate = 5; // 5%
     
-    // struct Listing {
-    //     address seller;
-    //     uint256 price;
-    //     bool listed;
-    // }
-    
-    // mapping(uint256 => Listing) public listings;
-
-    // event Listed(uint256 indexed tokenId, address seller, uint256 price);
-    // event Unlisted(uint256 indexed tokenId, address seller);
-    // event Purchased(uint256 indexed tokenId, address buyer, uint256 price);
-
-    function setUp() public view {
+    function setUp() public {
         bscTestnetFork = vm.createSelectFork(BNB_MAINNET_RPC_URL, blockNum);
 
         mintInterval = 30;
@@ -60,7 +42,7 @@ contract BananaNFTTest is Test {
         bob = users[1];
     }
 
-    function test_Deployment() public {
+    function test_Deployment() public view {
         assertEq(address(bananaMarketplace.token()), address(bananaToken));
         assertEq(address(bananaMarketplace.bananaNFT()), address(bananaNFT));
         assertFalse(bananaMarketplace.isFloorSet());
@@ -69,14 +51,28 @@ contract BananaNFTTest is Test {
     }
 
     function test_listNFT() public {
+        _mintNFTs();
+        bananaNFT.approve(address(bananaMarketplace), 1);
+        bananaMarketplace.listNFT(1, 1e20);
+    }
 
+    function test_buyNFT() public {
+        _mintNFTs();
+        bananaNFT.approve(address(bananaMarketplace), 1);
+        bananaMarketplace.listNFT(1, 1e20);
+        vm.stopPrank();
+        deal(address(bananaToken), bob, 1e22);
+        vm.prank(bob);
+        bananaToken.approve(address(bananaMarketplace), 1e22);
+        vm.prank(bob);
+        bananaMarketplace.buyNFT(1);
     }
 
     function _mintNFTs() internal {
         bananaNFT.addToWhitelsit(alice);
         vm.startPrank(alice);
         skip(whitelistMintTime);
-        for (uint256 i = 0; i < 100; ++i) {
+        for (uint256 i = 0; i < 1; ++i) {
             bananaNFT.mint("");
             skip(mintInterval);
         }

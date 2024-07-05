@@ -6,6 +6,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import {BananaNFT} from "./BananaNFT.sol";
+import {console} from "forge-std/console.sol";
 
 contract BananaMarketplace is IERC721Receiver, Ownable {
     IERC20 public token;
@@ -63,7 +64,9 @@ contract BananaMarketplace is IERC721Receiver, Ownable {
         uint256 sellerAmount = listing.price - burnAmount;
 
         token.transferFrom(msg.sender, address(this), burnAmount);
+        console.log("++++++++++++tx1++++++++++");
         token.transferFrom(msg.sender, listing.seller, sellerAmount);
+        console.log("++++++++++++tx2++++++++++");
         bananaNFT.safeTransferFrom(address(this), msg.sender, tokenId);
 
         delete listings[tokenId];

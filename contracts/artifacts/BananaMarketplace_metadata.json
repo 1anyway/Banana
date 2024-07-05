@@ -113,6 +113,25 @@
 				"type": "event"
 			},
 			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "seller",
+						"type": "address"
+					}
+				],
+				"name": "Unlisted",
+				"type": "event"
+			},
+			{
 				"inputs": [],
 				"name": "bananaNFT",
 				"outputs": [
@@ -165,6 +184,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "isFloorSet",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -201,6 +233,11 @@
 						"internalType": "uint256",
 						"name": "price",
 						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "listed",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -315,6 +352,19 @@
 					}
 				],
 				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					}
+				],
+				"name": "unlistNFT",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -497,11 +547,11 @@
 			]
 		},
 		"contracts/BananaMarketplace.sol": {
-			"keccak256": "0x53c4b006029c4ced50a0e922efc07e5d28d00c2980003fda8676196d7aff38f5",
+			"keccak256": "0xb089e03d7bb214412f381f00c15c822de9fdb5494c4416de575059674dd9711d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://0018de19ae8c3e853a05d2565697f49748136e502426741ec184fe129c44a307",
-				"dweb:/ipfs/QmWp74PpY89kLdrroDujGNiZucZodXeHCnMTL8SPBFSs31"
+				"bzz-raw://5ac8a08464baeabfeafd615432db95ec864051546206166e6cee5dd66dbea879",
+				"dweb:/ipfs/QmPae53eDYhrDh64SqnX7ji8AyMRwpodVYMchNHx1HYwos"
 			]
 		},
 		"contracts/BananaNFT.sol": {

@@ -2,7 +2,7 @@
 
 pragma solidity 0.8.26;
 
-import "forge-std/Script.sol";
+import {Script} from "forge-std/Script.sol";
 import {BananaToken} from "../contracts/BananaToken.sol";
 
 contract BananaTokenScript is Script {

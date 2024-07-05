@@ -10,18 +10,20 @@ import {BananaNFT} from "./BananaNFT.sol";
 contract BananaMarketplace is IERC721Receiver, Ownable {
     IERC20 public token;
     BananaNFT public bananaNFT;
-    bool isFloorSet;
+    bool public isFloorSet;
     uint256 public floorPrice;
     uint256 public burnRate = 5; // 5%
     
     struct Listing {
         address seller;
         uint256 price;
+        bool listed;
     }
     
     mapping(uint256 => Listing) public listings;
 
     event Listed(uint256 indexed tokenId, address seller, uint256 price);
+    event Unlisted(uint256 indexed tokenId, address seller);
     event Purchased(uint256 indexed tokenId, address buyer, uint256 price);
 
     constructor(IERC20 _token, BananaNFT _nft) Ownable(msg.sender) {
@@ -33,25 +35,36 @@ contract BananaMarketplace is IERC721Receiver, Ownable {
         if (isFloorSet) {
             require(price >=  floorPrice, "Floor price must greater than 100 token");
         }
+        require(!listings[tokenId].listed, "Already listed");
         require(bananaNFT.ownerOf(tokenId) == msg.sender, "Not owner");
-        require(listings[tokenId].seller == address(0), "Already listed");
 
-        bananaNFT.transferFrom(msg.sender, address(this), tokenId);
-        listings[tokenId] = Listing({seller: msg.sender, price: price});
+        bananaNFT.safeTransferFrom(msg.sender, address(this), tokenId);
+        listings[tokenId] = Listing({seller: msg.sender, price: price, listed: true});
 
         emit Listed(tokenId, msg.sender, price);
     }
 
+    function unlistNFT(uint256 tokenId) external {
+         require(listings[tokenId].listed, "token not list");
+         require(bananaNFT.ownerOf(tokenId) == msg.sender, "Not owner");
+
+         bananaNFT.safeTransferFrom(address(this), msg.sender, tokenId);
+        
+         delete listings[tokenId];
+
+         emit Unlisted(tokenId, msg.sender);
+    }
+
     function buyNFT(uint256 tokenId) external {
         Listing memory listing = listings[tokenId];
-        require(listing.seller != address(0), "Not listed");
+        require(listing.listed, "Not listed");
 
         uint256 burnAmount = (listing.price * burnRate) / 100;
         uint256 sellerAmount = listing.price - burnAmount;
 
         token.transferFrom(msg.sender, address(this), burnAmount);
         token.transferFrom(msg.sender, listing.seller, sellerAmount);
-        bananaNFT.transferFrom(address(this), msg.sender, tokenId);
+        bananaNFT.safeTransferFrom(address(this), msg.sender, tokenId);
 
         delete listings[tokenId];
         emit Purchased(tokenId, msg.sender, listing.price);
@@ -71,7 +84,7 @@ contract BananaMarketplace is IERC721Receiver, Ownable {
     }
     
     function setBurnRate(uint256 _burnRate) external onlyOwner {
-        require(_burnRate < 20, "Invalid _burnRate");
+        require(_burnRate < 20, "Invalid burnRate");
         burnRate = _burnRate;
     }
 

@@ -155,6 +155,25 @@
 					{
 						"indexed": true,
 						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "isExcluded",
+						"type": "bool"
+					}
+				],
+				"name": "ExcludeFromFees",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
 						"name": "previousOwner",
 						"type": "address"
 					},
@@ -192,6 +211,19 @@
 				],
 				"name": "Transfer",
 				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "_uniswapV2Router",
+				"outputs": [
+					{
+						"internalType": "contract IUniswapV2Router02",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			},
 			{
 				"inputs": [
@@ -274,6 +306,24 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "excluded",
+						"type": "bool"
+					}
+				],
+				"name": "excludeFromFees",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "name",
 				"outputs": [
@@ -307,6 +357,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_taxRate",
+						"type": "uint256"
+					}
+				],
+				"name": "setTaxRate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "symbol",
 				"outputs": [
@@ -314,6 +377,19 @@
 						"internalType": "string",
 						"name": "",
 						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "taxRate",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -584,11 +660,35 @@
 			]
 		},
 		"contracts/BananaToken.sol": {
-			"keccak256": "0x2ac80e6b2c76f2724e1c21883dfd2b5df93538ad45b7c6a622968e594bb24a69",
+			"keccak256": "0xbb6edb365a3f9c9d207651cb0844aaf88b629763357fbfa8c67f29f8d321ea25",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c2f302496d3e40217b2f5dec8a5af71085cd4ded9a94f3c532cd41b4b6b49664",
-				"dweb:/ipfs/QmabbpWhicsbkMVMeXx8PhAWf8dEjgox53ZNrNB7rSpb4e"
+				"bzz-raw://f356639f5592a44a38865663a8749dae00373755939920152c55c0c174760cda",
+				"dweb:/ipfs/QmdEHF8ywjkpmTCbaSZ8eXNNdu5fkksb9WXBXVFA6Na2Tc"
+			]
+		},
+		"contracts/interfaces/IUniswapV2Factory.sol": {
+			"keccak256": "0xe47612f9fe2912302bf9ba74bd548d09831a62e728d20ed9595ca06652b330bf",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c68717b92d5006488ba4ad97412ecd833f491e72e2418294b5d4fc2be6c4f987",
+				"dweb:/ipfs/QmZBxEgdxwTnxNMM5y26LKy6SrpSzS8zPR2zVdTbkwWgGp"
+			]
+		},
+		"contracts/interfaces/IUniswapV2Pair.sol": {
+			"keccak256": "0xf861a1d687aa77822407313ff67b9196a223cd898801496b8842a9766b4dbc79",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8fba077eb831136b4f3f0bf7c14cce11a7d733d3d20d12e25fd13e247398dc42",
+				"dweb:/ipfs/QmSm5CDExxAWVRUHJFBAdtWvWSS6dMKUEGUR3voyDoE7ri"
+			]
+		},
+		"contracts/interfaces/IUniswapV2Router02.sol": {
+			"keccak256": "0x02493d44b7425230c32ca3057699f8ded1a4c1f327d022faf0a40e1d794988d6",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2faa7c180106c7126baa11d8ebd204b153a09d1ff7f70623986d6fd595f1f100",
+				"dweb:/ipfs/QmZxqWYxNM7B4E92fna8GXWRTc82X8bpmNLuTvkpE3Nn6J"
 			]
 		}
 	},

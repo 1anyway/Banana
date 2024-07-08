@@ -20,7 +20,7 @@ contract BananaNFTTest is Test {
     uint256 public bscTestnetFork;
     string public BNB_MAINNET_RPC_URL = vm.envString("BNB_MAINNET_RPC_URL");
     uint256 public constant blockNum = 16449268;
-    
+
     uint256 public mintInterval;
     uint256 public whitelistMintTime;
     function setUp() public {
@@ -29,8 +29,13 @@ contract BananaNFTTest is Test {
         mintInterval = 30;
         whitelistMintTime = 60;
 
-        bananaToken = new BananaToken(1e26);
-        bananaNFT = new BananaNFT(mintInterval, bananaToken, whitelistMintTime);
+        bananaToken = new BananaToken(1e26, address(this));
+        bananaNFT = new BananaNFT(
+            mintInterval,
+            bananaToken,
+            whitelistMintTime,
+            0xcC93A941713e1aA28aDe56a3DB6805F163B10C14
+        );
 
         utils = new Utils();
         users = utils.createUsers(5);
@@ -43,7 +48,10 @@ contract BananaNFTTest is Test {
         assertEq(bananaNFT.mintPrice(), 0.01 ether);
         assertEq(bananaNFT.mintInterval(), mintInterval);
         assertFalse(bananaNFT._isSaleActive());
-        assertEq(bananaNFT.endWhitelistMintTime(), block.timestamp + whitelistMintTime);
+        assertEq(
+            bananaNFT.endWhitelistMintTime(),
+            block.timestamp + whitelistMintTime
+        );
         assertEq(bananaNFT._tokenURIs(1), "");
         assertEq(bananaNFT.lastMintTime(alice), 0);
     }
@@ -71,8 +79,12 @@ contract BananaNFTTest is Test {
     function test_judgePublicMint_AfterMint() public {
         skip(whitelistMintTime);
         vm.startPrank(alice);
-        bananaNFT.mint("");
-        assertEq(bananaNFT.judgeMint(), block.timestamp + mintInterval);
+        assertEq(bananaNFT.judgeMint(), 0);
+        for (uint256 i = 0; i < 100; ++i) {
+            bananaNFT.mint("");
+            assertEq(bananaNFT.judgeMint(), block.timestamp + mintInterval);
+            skip(30);
+        }
         vm.stopPrank();
     }
 

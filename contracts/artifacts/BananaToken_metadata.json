@@ -11,6 +11,11 @@
 						"internalType": "uint256",
 						"name": "initialSupply",
 						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_marketingWallet",
+						"type": "address"
 					}
 				],
 				"stateMutability": "nonpayable",
@@ -214,10 +219,23 @@
 			},
 			{
 				"inputs": [],
-				"name": "_uniswapV2Router",
+				"name": "DEAD",
 				"outputs": [
 					{
-						"internalType": "contract IUniswapV2Router02",
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "UNISWAP_V2_ROUTER",
+				"outputs": [
+					{
+						"internalType": "address",
 						"name": "",
 						"type": "address"
 					}
@@ -321,6 +339,25 @@
 				"name": "excludeFromFees",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "isExcludedFromFees",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -473,6 +510,36 @@
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "uniswapV2Pair",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "uniswapV2Router",
+				"outputs": [
+					{
+						"internalType": "contract IUniswapV2Router02",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "receive"
 			}
 		],
 		"devdoc": {
@@ -660,11 +727,11 @@
 			]
 		},
 		"contracts/BananaToken.sol": {
-			"keccak256": "0xbb6edb365a3f9c9d207651cb0844aaf88b629763357fbfa8c67f29f8d321ea25",
+			"keccak256": "0xb058a9d1de7619fbad1a955587e576f7e5525281850ad6f5098057b3df9720c5",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f356639f5592a44a38865663a8749dae00373755939920152c55c0c174760cda",
-				"dweb:/ipfs/QmdEHF8ywjkpmTCbaSZ8eXNNdu5fkksb9WXBXVFA6Na2Tc"
+				"bzz-raw://07bd486c348f1736651b6b35aa6e17485c583ed8c01fa3adbbbdae1f8c1dd078",
+				"dweb:/ipfs/Qmch5e4bVVpcfpjMLjykKocP3o5ca1tq7K7jCWPkhWsbti"
 			]
 		},
 		"contracts/interfaces/IUniswapV2Factory.sol": {
@@ -673,14 +740,6 @@
 			"urls": [
 				"bzz-raw://c68717b92d5006488ba4ad97412ecd833f491e72e2418294b5d4fc2be6c4f987",
 				"dweb:/ipfs/QmZBxEgdxwTnxNMM5y26LKy6SrpSzS8zPR2zVdTbkwWgGp"
-			]
-		},
-		"contracts/interfaces/IUniswapV2Pair.sol": {
-			"keccak256": "0xf861a1d687aa77822407313ff67b9196a223cd898801496b8842a9766b4dbc79",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://8fba077eb831136b4f3f0bf7c14cce11a7d733d3d20d12e25fd13e247398dc42",
-				"dweb:/ipfs/QmSm5CDExxAWVRUHJFBAdtWvWSS6dMKUEGUR3voyDoE7ri"
 			]
 		},
 		"contracts/interfaces/IUniswapV2Router02.sol": {

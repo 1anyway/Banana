@@ -17,9 +17,11 @@ contract BananaNFT is ERC721Enumerable, ReentrancyGuard, Ownable {
     uint256 public mintInterval;
     uint256 public endWhitelistMintTime;
     bool public _isSaleActive;
+    address private marketingWallet;
 
     mapping(uint256 tokenId => string) public _tokenURIs;
-    mapping(address => bool) whitelist;
+    mapping(string => uint256) private uriToTokenId;
+    mapping(address => bool) private whitelist;
     mapping(address => uint256) public lastMintTime;
 
     event Minted(address indexed user, uint256 tokenId);
@@ -27,11 +29,13 @@ contract BananaNFT is ERC721Enumerable, ReentrancyGuard, Ownable {
     constructor(
         uint256 _mintInterval,
         IERC20 _token,
-        uint256 whitelistMintTime
+        uint256 whitelistMintTime,
+        address _marketingWallet
     ) ERC721("BananaNFT", "BNFT") Ownable(msg.sender) {
         mintInterval = _mintInterval;
         token = _token;
         endWhitelistMintTime = block.timestamp + whitelistMintTime;
+        marketingWallet = _marketingWallet;
     }
 
     function tokenURI(
@@ -48,6 +52,11 @@ contract BananaNFT is ERC721Enumerable, ReentrancyGuard, Ownable {
 
         ++_tokenIdCounter;
         uint256 tokenId = _tokenIdCounter;
+         (bool success, ) = payable(marketingWallet).call{value: msg.value}("");
+        require(
+            success,
+            "Address: unable to send value, recipient may have reverted"
+        );
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, uri);
 
@@ -72,7 +81,6 @@ contract BananaNFT is ERC721Enumerable, ReentrancyGuard, Ownable {
         if (block.timestamp < endWhitelistMintTime) {
             require(whitelist[msg.sender], "Only whitelist user can mint"); 
         }
-
         ++_tokenIdCounter;
         uint256 tokenId = _tokenIdCounter;
         lastMintTime[msg.sender] = block.timestamp;
@@ -91,7 +99,7 @@ contract BananaNFT is ERC721Enumerable, ReentrancyGuard, Ownable {
     function _setTokenURI(
         uint256 tokenId,
         string memory _tokenURI
-    ) internal virtual {
+    ) internal {
         _tokenURIs[tokenId] = _tokenURI;
     }
 

@@ -47,7 +47,7 @@ contract BananaMarketplace is IERC721Receiver, Ownable {
 
     function unlistNFT(uint256 tokenId) external {
          require(listings[tokenId].listed, "token not list");
-         require(bananaNFT.ownerOf(tokenId) == msg.sender, "Not owner");
+         require(listings[tokenId].seller == msg.sender, "Not owner");
 
          bananaNFT.safeTransferFrom(address(this), msg.sender, tokenId);
         
@@ -59,14 +59,13 @@ contract BananaMarketplace is IERC721Receiver, Ownable {
     function buyNFT(uint256 tokenId) external {
         Listing memory listing = listings[tokenId];
         require(listing.listed, "Not listed");
+        require(msg.sender != listing.seller, "You are the seller");
 
         uint256 burnAmount = (listing.price * burnRate) / 100;
         uint256 sellerAmount = listing.price - burnAmount;
 
         token.transferFrom(msg.sender, address(this), burnAmount);
-        console.log("++++++++++++tx1++++++++++");
         token.transferFrom(msg.sender, listing.seller, sellerAmount);
-        console.log("++++++++++++tx2++++++++++");
         bananaNFT.safeTransferFrom(address(this), msg.sender, tokenId);
 
         delete listings[tokenId];

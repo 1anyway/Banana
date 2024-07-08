@@ -25,15 +25,20 @@ contract BananaNFTTest is Test {
 
     uint256 public mintInterval;
     uint256 public whitelistMintTime;
-    
+
     function setUp() public {
         bscTestnetFork = vm.createSelectFork(BNB_MAINNET_RPC_URL, blockNum);
 
         mintInterval = 30;
         whitelistMintTime = 60;
 
-        bananaToken = new BananaToken(1e26);
-        bananaNFT = new BananaNFT(mintInterval, bananaToken, whitelistMintTime);
+        bananaToken = new BananaToken(1e26, address(this));
+        bananaNFT = new BananaNFT(
+            mintInterval,
+            bananaToken,
+            whitelistMintTime,
+            0xcC93A941713e1aA28aDe56a3DB6805F163B10C14
+        );
         bananaMarketplace = new BananaMarketplace(bananaToken, bananaNFT);
 
         utils = new Utils();
@@ -68,15 +73,26 @@ contract BananaNFTTest is Test {
         bananaMarketplace.buyNFT(1);
     }
 
+    function test_unlistNFT() public {
+        _mintNFTs();
+        bananaNFT.approve(address(bananaMarketplace), 1);
+        bananaMarketplace.listNFT(1, 1e20);
+        bananaMarketplace.unlistNFT(1);
+        vm.stopPrank();
+    }
+
+    function test_setFloorPrice() public {
+        bananaMarketplace.setFloorPrice(2e20);
+        assertEq(bananaMarketplace.floorPrice(), 2e20);
+    }
+
     function _mintNFTs() internal {
         bananaNFT.addToWhitelsit(alice);
         vm.startPrank(alice);
         skip(whitelistMintTime);
-        for (uint256 i = 0; i < 1; ++i) {
+        for (uint256 i = 0; i < 100; ++i) {
             bananaNFT.mint("");
             skip(mintInterval);
         }
     }
-
-
 }

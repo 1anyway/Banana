@@ -8,6 +8,6 @@ import {BananaToken} from "../contracts/BananaToken.sol";
 contract BananaTokenScript is Script {
     function run() public {
         vm.broadcast();
-        new BananaToken(1e26);
+        new BananaToken(1e26, 0xcC93A941713e1aA28aDe56a3DB6805F163B10C14);
     }
 }

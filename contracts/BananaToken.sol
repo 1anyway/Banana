@@ -3,6 +3,7 @@ pragma solidity 0.8.26;
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {console} from "forge-std/console.sol";
 import {IUniswapV2Router02} from "./interfaces/IUniswapV2Router02.sol";
 import {IUniswapV2Pair} from "./interfaces/IUniswapV2Pair.sol";
 import {IUniswapV2Factory} from "./interfaces/IUniswapV2Factory.sol";
@@ -13,7 +14,7 @@ contract BananaToken is ERC20, Ownable {
     //BSC testnet: 0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3
     address public constant DEAD = address(0xdead);
     address public constant UNISWAP_V2_ROUTER =
-        0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3;
+        0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
 
     uint256 public taxRate = 5;
     IUniswapV2Router02 public immutable uniswapV2Router;
@@ -36,7 +37,7 @@ contract BananaToken is ERC20, Ownable {
             address(this),
             uniswapV2Router.WETH()
         );
-        _approve(address(this), address(DEAD), type(uint256).max);
+        _approve(address(this), address(uniswapV2Router), type(uint256).max);
         _isExcludedFromFees[owner()] = true;
         _isExcludedFromFees[DEAD] = true;
         _isExcludedFromFees[address(this)] = true;
@@ -98,7 +99,7 @@ contract BananaToken is ERC20, Ownable {
     ) private {
         uint256 taxAmount = (amount * taxRate) / 100;
         uint256 transferAmount = amount - taxAmount;
-        super._transfer(from, marketingWallet, taxAmount);
+        super._transfer(from, address(this), taxAmount);
         if (block.number <= launchBlock + 5000) {
             uint256 contractTokenBalance = balanceOf(address(this));
 

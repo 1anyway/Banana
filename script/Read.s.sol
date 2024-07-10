@@ -9,8 +9,8 @@ contract ReadScript is Script {
     function run() public {
         vm.broadcast();
         new Read(
-            0x338d96c13AC705B5915891358adF8f5E9b780d18,
-            0x7c11cf8B337246317D55Ba2eBB5868422001b8E5
+            0xF7276bA2f6895707fa6884EeF541D8d3Ce6e36f8,
+            0xc5747F1Fe0f37099a30555d54A82367199371D81
         );
     }
 }

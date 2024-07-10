@@ -19,7 +19,7 @@ contract BananaTokenTest is Test {
 
     uint256 public bscTestnetFork;
     string public BNB_MAINNET_RPC_URL = vm.envString("BNB_MAINNET_RPC_URL");
-    uint256 public constant blockNum = 40285147;
+    uint256 public constant blockNum = 20274555;
     /**
         16449268
          */
@@ -31,7 +31,9 @@ contract BananaTokenTest is Test {
         alice = users[0];
         bob = users[1];
 
-        bananaToken = new BananaToken(0xcC93A941713e1aA28aDe56a3DB6805F163B10C14);
+        bananaToken = new BananaToken(
+            0xcC93A941713e1aA28aDe56a3DB6805F163B10C14
+        );
     }
 
     function test_BananaToken_Deployment() public view {
@@ -41,12 +43,12 @@ contract BananaTokenTest is Test {
         );
         assertEq(
             bananaToken.UNISWAP_V2_ROUTER(),
-            0x10ED43C718714eb63d5aA57B78B54704E256024E
+            0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
         );
         assertEq(bananaToken.taxRate(), 5);
         assertEq(
             address(bananaToken.uniswapV2Router()),
-            0x10ED43C718714eb63d5aA57B78B54704E256024E
+            0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
         );
     }
 
@@ -70,6 +72,35 @@ contract BananaTokenTest is Test {
     }
 
     function test_swap() public {
+        deal(bananaToken.uniswapV2Router().WETH(), address(this), 1e26);
+        bananaToken.approve(address(bananaToken.uniswapV2Router()), 1e25);
+        IERC20(bananaToken.uniswapV2Router().WETH()).approve(
+            address(bananaToken.uniswapV2Router()),
+            2e18
+        );
+        bananaToken.uniswapV2Router().addLiquidity(
+            address(bananaToken),
+            bananaToken.uniswapV2Router().WETH(),
+            1e25,
+            2e18,
+            0,
+            0,
+            address(this),
+            block.timestamp
+        );
+        console.log("marketingWallet balance before swap");
+        console.log(
+            bananaToken.balanceOf(0xcC93A941713e1aA28aDe56a3DB6805F163B10C14)
+        );
+        console.log(
+            IERC20(bananaToken.uniswapV2Router().WETH()).balanceOf(
+                0xcC93A941713e1aA28aDe56a3DB6805F163B10C14
+            )
+        );
+        console.log(
+            address(0xcC93A941713e1aA28aDe56a3DB6805F163B10C14).balance
+        );
+
         bananaToken.transfer(alice, 1e26);
         bananaToken.transfer(bob, 1e26);
         deal(bananaToken.uniswapV2Router().WETH(), alice, 1e26);
@@ -104,9 +135,39 @@ contract BananaTokenTest is Test {
                 bob,
                 block.timestamp
             );
+        vm.stopPrank();
+        console.log("marketingWallet balance after swap");
+        console.log(
+            bananaToken.balanceOf(0xcC93A941713e1aA28aDe56a3DB6805F163B10C14)
+        );
+        console.log(
+            IERC20(bananaToken.uniswapV2Router().WETH()).balanceOf(
+                0xcC93A941713e1aA28aDe56a3DB6805F163B10C14
+            )
+        );
+        console.log(
+            address(0xcC93A941713e1aA28aDe56a3DB6805F163B10C14).balance
+        );
     }
 
     function test_addLiquidity() public {
+        deal(bananaToken.uniswapV2Router().WETH(), address(this), 1e26);
+        bananaToken.approve(address(bananaToken.uniswapV2Router()), 1e25);
+        IERC20(bananaToken.uniswapV2Router().WETH()).approve(
+            address(bananaToken.uniswapV2Router()),
+            2e18
+        );
+        bananaToken.uniswapV2Router().addLiquidity(
+            address(bananaToken),
+            bananaToken.uniswapV2Router().WETH(),
+            1e25,
+            2e18,
+            0,
+            0,
+            alice,
+            block.timestamp
+        );
+
         bananaToken.transfer(alice, 1e26);
         deal(bananaToken.uniswapV2Router().WETH(), alice, 1e26);
         vm.startPrank(alice);
@@ -123,6 +184,27 @@ contract BananaTokenTest is Test {
             0,
             0,
             alice,
+            block.timestamp
+        );
+        vm.stopPrank();
+    }
+
+    function test_removeLiquidity() public {
+        test_swap();
+        uint256 liquidity = IERC20(bananaToken.uniswapV2Pair()).balanceOf(
+            address(this)
+        );
+        IERC20(bananaToken.uniswapV2Pair()).approve(
+            address(bananaToken.uniswapV2Router()),
+            liquidity
+        );
+        bananaToken.uniswapV2Router().removeLiquidity(
+            address(bananaToken),
+            bananaToken.uniswapV2Router().WETH(),
+            liquidity / 100,
+            0,
+            0,
+            address(this),
             block.timestamp
         );
     }

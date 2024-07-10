@@ -6,10 +6,8 @@ import {Test} from "forge-std/Test.sol";
 import {console} from "forge-std/console.sol";
 import {Utils} from "./Utils.sol";
 import {BananaNFT} from "../../contracts/BananaNFT.sol";
-import {BananaToken} from "../../contracts/BananaToken.sol";
 
 contract BananaNFTTest is Test {
-    BananaToken internal bananaToken;
     BananaNFT internal bananaNFT;
 
     Utils internal utils;
@@ -17,22 +15,20 @@ contract BananaNFTTest is Test {
     address internal alice;
     address internal bob;
 
-    uint256 public bscTestnetFork;
+    uint256 public bscFork;
     string public BNB_MAINNET_RPC_URL = vm.envString("BNB_MAINNET_RPC_URL");
-    uint256 public constant blockNum = 16449268;
+    uint256 public constant blockNum = 20274555;
 
     uint256 public mintInterval;
     uint256 public whitelistMintTime;
     function setUp() public {
-        bscTestnetFork = vm.createSelectFork(BNB_MAINNET_RPC_URL, blockNum);
+        bscFork = vm.createSelectFork(BNB_MAINNET_RPC_URL, blockNum);
 
         mintInterval = 30;
         whitelistMintTime = 60;
 
-        bananaToken = new BananaToken(0xcC93A941713e1aA28aDe56a3DB6805F163B10C14);
         bananaNFT = new BananaNFT(
             mintInterval,
-            bananaToken,
             whitelistMintTime,
             0xcC93A941713e1aA28aDe56a3DB6805F163B10C14
         );
@@ -44,8 +40,7 @@ contract BananaNFTTest is Test {
     }
 
     function test_Deployment() public view {
-        assertEq(address(bananaNFT.token()), address(bananaToken));
-        assertEq(bananaNFT.mintPrice(), 0.01 ether);
+        assertEq(bananaNFT.mintPrice(), 0.005 ether);
         assertEq(bananaNFT.mintInterval(), mintInterval);
         assertFalse(bananaNFT._isSaleActive());
         assertEq(
@@ -56,60 +51,33 @@ contract BananaNFTTest is Test {
         assertEq(bananaNFT.lastMintTime(alice), 0);
     }
 
-    function test_judgeWhitelistMint_BeforeMint() public {
-        bananaNFT.addToWhitelsit(alice);
-        vm.prank(alice);
-        assertEq(bananaNFT.judgeMint(), 0);
-    }
-
-    function test_judgeWhitelistMint_AfterMint() public {
-        bananaNFT.addToWhitelsit(alice);
-        vm.startPrank(alice);
-        bananaNFT.mint("");
-        assertEq(bananaNFT.judgeMint(), block.timestamp + mintInterval);
-        vm.stopPrank();
-    }
-
-    function test_judgePublicMint_BeforeMint() public {
-        skip(whitelistMintTime);
-        vm.prank(alice);
-        assertEq(bananaNFT.judgeMint(), 0);
-    }
-
-    function test_judgePublicMint_AfterMint() public {
-        skip(whitelistMintTime);
-        vm.startPrank(alice);
-        assertEq(bananaNFT.judgeMint(), 0);
-        for (uint256 i = 0; i < 100; ++i) {
-            bananaNFT.mint("");
-            assertEq(bananaNFT.judgeMint(), block.timestamp + mintInterval);
-            skip(30);
-        }
-        vm.stopPrank();
-    }
-
     function test_whitelistMint() public {
-        bananaNFT.addToWhitelsit(alice);
+        bananaNFT.addToWhitelist(alice);
         vm.prank(alice);
         bananaNFT.mint("");
     }
 
     function test_publicMint() public {
         skip(whitelistMintTime);
+        assertEq(bananaNFT.currentTokenId(), 0);
         vm.startPrank(alice);
         for (uint256 i = 0; i < 100; ++i) {
             bananaNFT.mint("");
             skip(mintInterval);
         }
+        assertEq(bananaNFT.currentTokenId(), 100);
     }
 
     function test_payToMint() public {
         bananaNFT.flipSaleActive();
+        deal(alice, 1e20);
+        assertEq(bananaNFT.currentTokenId(), 0);
         vm.startPrank(alice);
         uint256 msgValue = bananaNFT.mintPrice();
-        for (uint256 i = 1; i < 100; ++i) {
+        for (uint256 i = 0; i < 100; ++i) {
             bananaNFT.payToMint{value: msgValue}("");
         }
+        assertEq(bananaNFT.currentTokenId(), 100);
     }
 
     function test_whitelistMint_Fail_NotWhitelist() public {
@@ -119,7 +87,7 @@ contract BananaNFTTest is Test {
     }
 
     function test_whitelistMint_Fail_NotReachTime() public {
-        bananaNFT.addToWhitelsit(alice);
+        bananaNFT.addToWhitelist(alice);
         vm.prank(alice);
         bananaNFT.mint("");
         vm.expectRevert();
@@ -134,5 +102,81 @@ contract BananaNFTTest is Test {
         bananaNFT.mint("Not reach mint time");
     }
 
-    // function test_
+    function test_addToWhitelist() public {
+        assertFalse(bananaNFT.whitelist(alice));
+        bananaNFT.addToWhitelist(alice);
+        assertTrue(bananaNFT.whitelist(alice));
+    }
+
+    function test_addToWhitelist_NotOwnerCall_Fail() public {
+        assertFalse(bananaNFT.whitelist(alice));
+        vm.prank(alice);
+        vm.expectRevert(
+            abi.encodeWithSignature(
+                "OwnableUnauthorizedAccount(address)",
+                alice
+            )
+        );
+        bananaNFT.addToWhitelist(alice);
+        assertFalse(bananaNFT.whitelist(alice));
+    }
+
+    function test_setMintInterval() public {
+        assertEq(bananaNFT.mintInterval(), 30);
+        bananaNFT.setMintInterval(3600);
+        assertEq(bananaNFT.mintInterval(), 3600);
+    }
+
+    function test_setMintInterval_NotOwnerCall_Fail() public {
+        assertEq(bananaNFT.mintInterval(), 30);
+        vm.prank(alice);
+        vm.expectRevert(
+            abi.encodeWithSignature(
+                "OwnableUnauthorizedAccount(address)",
+                alice
+            )
+        );
+        bananaNFT.setMintInterval(3600);
+        assertEq(bananaNFT.mintInterval(), 30);
+    }
+
+    function test_flipSaleActive() public {
+        assertFalse(bananaNFT._isSaleActive());
+        bananaNFT.flipSaleActive();
+        assertTrue(bananaNFT._isSaleActive());
+        bananaNFT.flipSaleActive();
+        assertFalse(bananaNFT._isSaleActive());
+    }
+
+    function test_flipSaleActive_NotOwnerCall_Fail() public {
+        assertFalse(bananaNFT._isSaleActive());
+        vm.prank(alice);
+        vm.expectRevert(
+            abi.encodeWithSignature(
+                "OwnableUnauthorizedAccount(address)",
+                alice
+            )
+        );
+        bananaNFT.flipSaleActive();
+        assertFalse(bananaNFT._isSaleActive());
+    }
+
+    function test_setMintPrice() public {
+        assertEq(bananaNFT.mintPrice(), 5e15);
+        bananaNFT.setMintPrice(1e16);
+        assertEq(bananaNFT.mintPrice(), 1e16);
+    }
+
+    function test_setMintPrice_NotOwnerCall_Fail() public {
+        assertEq(bananaNFT.mintPrice(), 5e15);
+        vm.prank(alice);
+        vm.expectRevert(
+            abi.encodeWithSignature(
+                "OwnableUnauthorizedAccount(address)",
+                alice
+            )
+        );
+        bananaNFT.setMintPrice(1e16);
+        assertEq(bananaNFT.mintPrice(), 5e15);
+    }
 }

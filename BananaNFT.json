@@ -7,11 +7,6 @@
 				"type": "uint256"
 			},
 			{
-				"internalType": "contract IERC20",
-				"name": "_token",
-				"type": "address"
-			},
-			{
 				"internalType": "uint256",
 				"name": "whitelistMintTime",
 				"type": "uint256"
@@ -329,7 +324,7 @@
 				"type": "address"
 			}
 		],
-		"name": "addToWhitelsit",
+		"name": "addToWhitelist",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -448,19 +443,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "judgeMint",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "nextMintTime",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -488,13 +470,7 @@
 			}
 		],
 		"name": "mint",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -578,13 +554,7 @@
 			}
 		],
 		"name": "payToMint",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [],
 		"stateMutability": "payable",
 		"type": "function"
 	},
@@ -723,19 +693,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "token",
-		"outputs": [
-			{
-				"internalType": "contract IERC20",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -844,6 +801,25 @@
 		"name": "transferOwnership",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "whitelist",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{

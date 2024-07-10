@@ -9,31 +9,25 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract BananaNFT is ERC721Enumerable, ReentrancyGuard, Ownable {
-
-    uint256 private _tokenIdCounter;
-
-    IERC20 public token;
-    uint256 public mintPrice = 0.01 ether;
+    uint256 public mintPrice = 0.005 ether;
     uint256 public mintInterval;
     uint256 public endWhitelistMintTime;
     bool public _isSaleActive;
+    uint256 private _tokenIdCounter;
     address private marketingWallet;
 
     mapping(uint256 tokenId => string) public _tokenURIs;
-    mapping(string => uint256) private uriToTokenId;
-    mapping(address => bool) private whitelist;
+    mapping(address => bool) public whitelist;
     mapping(address => uint256) public lastMintTime;
 
     event Minted(address indexed user, uint256 tokenId);
 
     constructor(
         uint256 _mintInterval,
-        IERC20 _token,
         uint256 whitelistMintTime,
         address _marketingWallet
     ) ERC721("BananaNFT", "BNFT") Ownable(msg.sender) {
         mintInterval = _mintInterval;
-        token = _token;
         endWhitelistMintTime = block.timestamp + whitelistMintTime;
         marketingWallet = _marketingWallet;
     }
@@ -46,13 +40,13 @@ contract BananaNFT is ERC721Enumerable, ReentrancyGuard, Ownable {
         return _tokenURI;
     }
 
-    function payToMint(string memory uri) external payable nonReentrant returns (uint256) {
+    function payToMint(string memory uri) external payable nonReentrant {
         require(_isSaleActive, "Sale is not active");
         require(msg.value == mintPrice, "Incorrect ETH value");
 
         ++_tokenIdCounter;
         uint256 tokenId = _tokenIdCounter;
-         (bool success, ) = payable(marketingWallet).call{value: msg.value}("");
+        (bool success, ) = payable(marketingWallet).call{value: msg.value}("");
         require(
             success,
             "Address: unable to send value, recipient may have reverted"
@@ -61,25 +55,15 @@ contract BananaNFT is ERC721Enumerable, ReentrancyGuard, Ownable {
         _setTokenURI(tokenId, uri);
 
         emit Minted(msg.sender, tokenId);
-
-        return tokenId;
     }
 
-    function judgeMint() external view returns (uint256 nextMintTime) {
-        if (lastMintTime[msg.sender] == 0) {
-            nextMintTime = 0;
-        } else {
-            nextMintTime = lastMintTime[msg.sender] + mintInterval;
-        }
-    }
-
-    function mint(string memory uri) external nonReentrant returns (uint256) {
+    function mint(string memory uri) external nonReentrant {
         require(
             block.timestamp >= lastMintTime[msg.sender] + mintInterval,
             "Not reach mint time"
         );
         if (block.timestamp < endWhitelistMintTime) {
-            require(whitelist[msg.sender], "Only whitelist user can mint"); 
+            require(whitelist[msg.sender], "Only whitelist user can mint");
         }
         ++_tokenIdCounter;
         uint256 tokenId = _tokenIdCounter;
@@ -88,19 +72,10 @@ contract BananaNFT is ERC721Enumerable, ReentrancyGuard, Ownable {
         _setTokenURI(tokenId, uri);
 
         emit Minted(msg.sender, tokenId);
-
-        return tokenId;
     }
 
-    function addToWhitelsit(address user) external onlyOwner {
+    function addToWhitelist(address user) external onlyOwner {
         whitelist[user] = true;
-    }
-
-    function _setTokenURI(
-        uint256 tokenId,
-        string memory _tokenURI
-    ) internal {
-        _tokenURIs[tokenId] = _tokenURI;
     }
 
     function setMintInterval(uint256 _mintInterval) external onlyOwner {
@@ -115,11 +90,15 @@ contract BananaNFT is ERC721Enumerable, ReentrancyGuard, Ownable {
         mintPrice = _mintPrice;
     }
 
+    function withdraw() external onlyOwner {
+        payable(marketingWallet).transfer(address(this).balance);
+    }
+
     function currentTokenId() public view returns (uint256) {
         return _tokenIdCounter;
     }
 
-    function withdraw() external onlyOwner {
-        payable(marketingWallet).transfer(address(this).balance);
+    function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal {
+        _tokenURIs[tokenId] = _tokenURI;
     }
 }

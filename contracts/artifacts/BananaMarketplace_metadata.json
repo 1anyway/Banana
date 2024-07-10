@@ -568,27 +568,19 @@
 			]
 		},
 		"contracts/BananaMarketplace.sol": {
-			"keccak256": "0xe01a67d8e0cb025bea554196388ccf3efe83a9b69d44c0177e3bfea436e68f57",
+			"keccak256": "0x0490f8a0d8440fd33bd703db7c883bc5b60da9c793ebabde3358c688c5a171e0",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://9c6970d8ff2a9a4cc535e9ae34afa397c6557b498022fcba718df7ec928491f8",
-				"dweb:/ipfs/QmX1AqdUkwkz8NsAtirYsFPM18MwSViFs4ZtxC3ra7W1vH"
+				"bzz-raw://7e29392ac6b6120ab40597bc3ebaa8d611f273947f1a277c2beb0565befbb14b",
+				"dweb:/ipfs/QmUKX6oqPfbxyMQexTyuyJBVHyCs72f9xjGLnsP7JqqsNc"
 			]
 		},
 		"contracts/BananaNFT.sol": {
-			"keccak256": "0x61b9d5fe8bcd0d4965f9db420d387612b96f64aae640556e8a29782f1895923d",
+			"keccak256": "0x240545327cfc088644e2b5f1cf3661b4d06c7c898fe15e68af8b28e31dbfac37",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://88c7e0a1076f7d0a098266bde4c274a04d0ca392377f9dcfb7f6760a5f633821",
-				"dweb:/ipfs/QmdrrYYwL4PHUMQQxGShkyEAv52d87b1QfHmXU8gP9MVqe"
-			]
-		},
-		"forge-std/console.sol": {
-			"keccak256": "0x91d5413c2434ca58fd278b6e1e79fd98d10c83931cc2596a6038eee4daeb34ba",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://91ccea707361e48b9b7a161fe81f496b9932bc471e9c4e4e1e9c283f2453cc70",
-				"dweb:/ipfs/QmcB66sZhQ6Kz7MUHcLE78YXRUZxoZnnxZjN6yATsbB2ec"
+				"bzz-raw://367a67a17832fb5d5827c8626294264e3e4461fffe5bb316417d0ac845b4ffff",
+				"dweb:/ipfs/QmVZLKWx9qcoyjxcsJ2W8KjyZc8hXRuJHqdVbZWXEezoKS"
 			]
 		}
 	},

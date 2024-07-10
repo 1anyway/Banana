@@ -13,11 +13,6 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "contract IERC20",
-						"name": "_token",
-						"type": "address"
-					},
-					{
 						"internalType": "uint256",
 						"name": "whitelistMintTime",
 						"type": "uint256"
@@ -335,7 +330,7 @@
 						"type": "address"
 					}
 				],
-				"name": "addToWhitelsit",
+				"name": "addToWhitelist",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -454,19 +449,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "judgeMint",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "nextMintTime",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -494,13 +476,7 @@
 					}
 				],
 				"name": "mint",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
+				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -584,13 +560,7 @@
 					}
 				],
 				"name": "payToMint",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
+				"outputs": [],
 				"stateMutability": "payable",
 				"type": "function"
 			},
@@ -729,19 +699,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "token",
-				"outputs": [
-					{
-						"internalType": "contract IERC20",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -850,6 +807,25 @@
 				"name": "transferOwnership",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "whitelist",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -1179,11 +1155,11 @@
 			]
 		},
 		"contracts/BananaNFT.sol": {
-			"keccak256": "0x61b9d5fe8bcd0d4965f9db420d387612b96f64aae640556e8a29782f1895923d",
+			"keccak256": "0x240545327cfc088644e2b5f1cf3661b4d06c7c898fe15e68af8b28e31dbfac37",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://88c7e0a1076f7d0a098266bde4c274a04d0ca392377f9dcfb7f6760a5f633821",
-				"dweb:/ipfs/QmdrrYYwL4PHUMQQxGShkyEAv52d87b1QfHmXU8gP9MVqe"
+				"bzz-raw://367a67a17832fb5d5827c8626294264e3e4461fffe5bb316417d0ac845b4ffff",
+				"dweb:/ipfs/QmVZLKWx9qcoyjxcsJ2W8KjyZc8hXRuJHqdVbZWXEezoKS"
 			]
 		}
 	},

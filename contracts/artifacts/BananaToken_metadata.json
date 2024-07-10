@@ -722,11 +722,11 @@
 			]
 		},
 		"contracts/BananaToken.sol": {
-			"keccak256": "0x355a69b06f4b66d7ad399a2ee38b64412e33bbfb59677f5607864a8934989f26",
+			"keccak256": "0x81f9b247f5655daa8e48fd2abc8a05c095c098c4425316420f111b38556016cc",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b72c17d810998aee97064007af8dedf9b64ec4ff0d91c7b4d7cb9e3338943763",
-				"dweb:/ipfs/Qmf2tVXbpCepbL2b6owaHiSeaxm1piYQBT6jGjQcFQQijq"
+				"bzz-raw://3052ff065bbb08fb0e72dd244e75f690532c4528af034b2e644bfcc23e77ee24",
+				"dweb:/ipfs/QmUwHWy96nEvwDFoNdNAqR1nFnabKqi1cooGTcmKaCjidx"
 			]
 		},
 		"contracts/interfaces/IUniswapV2Factory.sol": {
@@ -746,11 +746,19 @@
 			]
 		},
 		"contracts/interfaces/IUniswapV2Router02.sol": {
-			"keccak256": "0x02493d44b7425230c32ca3057699f8ded1a4c1f327d022faf0a40e1d794988d6",
+			"keccak256": "0x43b9a68e253c589850dc8f125a543b6460d1b07c9c58b8834cd3ae4988fcd130",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://2faa7c180106c7126baa11d8ebd204b153a09d1ff7f70623986d6fd595f1f100",
-				"dweb:/ipfs/QmZxqWYxNM7B4E92fna8GXWRTc82X8bpmNLuTvkpE3Nn6J"
+				"bzz-raw://70aa481427a0396cc3af381dd18096efaffaa7e64d22783469c21a709e78fccc",
+				"dweb:/ipfs/QmaqhTrq1ukVDeRVBuP3WcMGZ43za7aHdHJRsyAcorQcqA"
+			]
+		},
+		"forge-std/console.sol": {
+			"keccak256": "0x91d5413c2434ca58fd278b6e1e79fd98d10c83931cc2596a6038eee4daeb34ba",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://91ccea707361e48b9b7a161fe81f496b9932bc471e9c4e4e1e9c283f2453cc70",
+				"dweb:/ipfs/QmcB66sZhQ6Kz7MUHcLE78YXRUZxoZnnxZjN6yATsbB2ec"
 			]
 		}
 	},

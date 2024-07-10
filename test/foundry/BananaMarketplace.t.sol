@@ -19,23 +19,24 @@ contract BananaNFTTest is Test {
     address internal alice;
     address internal bob;
 
-    uint256 public bscTestnetFork;
+    uint256 public bscFork;
     string public BNB_MAINNET_RPC_URL = vm.envString("BNB_MAINNET_RPC_URL");
-    uint256 public constant blockNum = 16449268;
+    uint256 public constant blockNum = 20274555;
 
     uint256 public mintInterval;
     uint256 public whitelistMintTime;
 
     function setUp() public {
-        bscTestnetFork = vm.createSelectFork(BNB_MAINNET_RPC_URL, blockNum);
+        bscFork = vm.createSelectFork(BNB_MAINNET_RPC_URL, blockNum);
 
         mintInterval = 30;
         whitelistMintTime = 60;
 
-        bananaToken = new BananaToken(0xcC93A941713e1aA28aDe56a3DB6805F163B10C14);
+        bananaToken = new BananaToken(
+            0xcC93A941713e1aA28aDe56a3DB6805F163B10C14
+        );
         bananaNFT = new BananaNFT(
             mintInterval,
-            bananaToken,
             whitelistMintTime,
             0xcC93A941713e1aA28aDe56a3DB6805F163B10C14
         );
@@ -214,7 +215,7 @@ contract BananaNFTTest is Test {
     }
 
     function _mintNFTs() internal {
-        bananaNFT.addToWhitelsit(alice);
+        bananaNFT.addToWhitelist(alice);
         vm.startPrank(alice);
         skip(whitelistMintTime);
         for (uint256 i = 0; i < 100; ++i) {

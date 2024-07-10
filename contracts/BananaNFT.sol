@@ -92,7 +92,7 @@ contract BananaNFT is ERC721Enumerable, ReentrancyGuard, Ownable {
         return tokenId;
     }
 
-    function addToWhitelsit(address user) external {
+    function addToWhitelsit(address user) external onlyOwner {
         whitelist[user] = true;
     }
 
@@ -120,6 +120,6 @@ contract BananaNFT is ERC721Enumerable, ReentrancyGuard, Ownable {
     }
 
     function withdraw() external onlyOwner {
-        payable(owner()).transfer(address(this).balance);
+        payable(marketingWallet).transfer(address(this).balance);
     }
 }

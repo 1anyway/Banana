@@ -8,11 +8,6 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
-						"name": "initialSupply",
-						"type": "uint256"
-					},
-					{
 						"internalType": "address",
 						"name": "_marketingWallet",
 						"type": "address"
@@ -727,11 +722,11 @@
 			]
 		},
 		"contracts/BananaToken.sol": {
-			"keccak256": "0xb058a9d1de7619fbad1a955587e576f7e5525281850ad6f5098057b3df9720c5",
+			"keccak256": "0x355a69b06f4b66d7ad399a2ee38b64412e33bbfb59677f5607864a8934989f26",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://07bd486c348f1736651b6b35aa6e17485c583ed8c01fa3adbbbdae1f8c1dd078",
-				"dweb:/ipfs/Qmch5e4bVVpcfpjMLjykKocP3o5ca1tq7K7jCWPkhWsbti"
+				"bzz-raw://b72c17d810998aee97064007af8dedf9b64ec4ff0d91c7b4d7cb9e3338943763",
+				"dweb:/ipfs/Qmf2tVXbpCepbL2b6owaHiSeaxm1piYQBT6jGjQcFQQijq"
 			]
 		},
 		"contracts/interfaces/IUniswapV2Factory.sol": {
@@ -740,6 +735,14 @@
 			"urls": [
 				"bzz-raw://c68717b92d5006488ba4ad97412ecd833f491e72e2418294b5d4fc2be6c4f987",
 				"dweb:/ipfs/QmZBxEgdxwTnxNMM5y26LKy6SrpSzS8zPR2zVdTbkwWgGp"
+			]
+		},
+		"contracts/interfaces/IUniswapV2Pair.sol": {
+			"keccak256": "0xf861a1d687aa77822407313ff67b9196a223cd898801496b8842a9766b4dbc79",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8fba077eb831136b4f3f0bf7c14cce11a7d733d3d20d12e25fd13e247398dc42",
+				"dweb:/ipfs/QmSm5CDExxAWVRUHJFBAdtWvWSS6dMKUEGUR3voyDoE7ri"
 			]
 		},
 		"contracts/interfaces/IUniswapV2Router02.sol": {

@@ -1,0 +1,117 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_bananaToken",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_uniswapV2Pair",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "bananaToken",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getBananaTokenPriceInETH",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "uniswapV2Pair",
+				"outputs": [
+					{
+						"internalType": "contract IUniswapV2Pair",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Read.sol": "Read"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0xc6a8ff0ea489379b61faa647490411b80102578440ab9d84e9a957cc12164e70",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0ea104e577e63faea3b69c415637e99e755dcbf64c5833d7140c35a714d6d90c",
+				"dweb:/ipfs/Qmau6x4Ns9XdyynRCNNp3RhLqijJjFm7z5fyZazfYFGYdq"
+			]
+		},
+		"contracts/Read.sol": {
+			"keccak256": "0x861c498c6a3c667e0d1c0a299337a49efb6e97367468f389a5852c0c05a9d527",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2b8a436a6fbc4bebd724c01b43f1cd08708491be801a4c31af95f69fa56d1485",
+				"dweb:/ipfs/QmRZf9YkGqRuojsGY9UNSaNSB8n86CFawqXdVPnRDsc5qP"
+			]
+		},
+		"contracts/interfaces/IUniswapV2Pair.sol": {
+			"keccak256": "0xf861a1d687aa77822407313ff67b9196a223cd898801496b8842a9766b4dbc79",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8fba077eb831136b4f3f0bf7c14cce11a7d733d3d20d12e25fd13e247398dc42",
+				"dweb:/ipfs/QmSm5CDExxAWVRUHJFBAdtWvWSS6dMKUEGUR3voyDoE7ri"
+			]
+		}
+	},
+	"version": 1
+}

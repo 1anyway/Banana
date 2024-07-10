@@ -10,6 +10,9 @@ import {BananaMarketplace} from "../contracts/BananaMarketplace.sol";
 contract BananaMarketplaceScript is Script {
     function run() public {
         vm.broadcast();
-        new BananaMarketplace(IERC20(0x0D35548DBD3CC4583A77Be279d54a6Ebf4AEFFE6), BananaNFT(0x1A998FBb431809E913047C154653e5016CABd2F1));
+        new BananaMarketplace(
+            IERC20(0x338d96c13AC705B5915891358adF8f5E9b780d18),
+            BananaNFT(0x12bD6b752a5361B4F8D8364a705f4fAcf053d448)
+        );
     }
 }

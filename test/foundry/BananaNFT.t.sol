@@ -29,7 +29,7 @@ contract BananaNFTTest is Test {
         mintInterval = 30;
         whitelistMintTime = 60;
 
-        bananaToken = new BananaToken(1e26, address(this));
+        bananaToken = new BananaToken(0xcC93A941713e1aA28aDe56a3DB6805F163B10C14);
         bananaNFT = new BananaNFT(
             mintInterval,
             bananaToken,
@@ -133,4 +133,6 @@ contract BananaNFTTest is Test {
         vm.expectRevert();
         bananaNFT.mint("Not reach mint time");
     }
+
+    // function test_
 }

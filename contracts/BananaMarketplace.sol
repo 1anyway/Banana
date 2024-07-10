@@ -9,11 +9,12 @@ import {BananaNFT} from "./BananaNFT.sol";
 import {console} from "forge-std/console.sol";
 
 contract BananaMarketplace is IERC721Receiver, Ownable {
+    address public constant DEAD = address(0xdead);
     IERC20 public token;
     BananaNFT public bananaNFT;
     bool public isFloorSet;
     uint256 public floorPrice;
-    uint256 public burnRate = 5; // 5%
+    uint256 public burnRate = 3; // 5%
     
     struct Listing {
         address seller;
@@ -34,7 +35,7 @@ contract BananaMarketplace is IERC721Receiver, Ownable {
 
     function listNFT(uint256 tokenId, uint256 price) external {
         if (isFloorSet) {
-            require(price >=  floorPrice, "Floor price must greater than 100 token");
+            require(price >=  floorPrice, "List price must greater than floor price");
         }
         require(!listings[tokenId].listed, "Already listed");
         require(bananaNFT.ownerOf(tokenId) == msg.sender, "Not owner");
@@ -64,7 +65,7 @@ contract BananaMarketplace is IERC721Receiver, Ownable {
         uint256 burnAmount = (listing.price * burnRate) / 100;
         uint256 sellerAmount = listing.price - burnAmount;
 
-        token.transferFrom(msg.sender, address(this), burnAmount);
+        token.transferFrom(msg.sender, DEAD, burnAmount);
         token.transferFrom(msg.sender, listing.seller, sellerAmount);
         bananaNFT.safeTransferFrom(address(this), msg.sender, tokenId);
 

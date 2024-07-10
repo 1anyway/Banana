@@ -21,6 +21,11 @@
 						"internalType": "uint256",
 						"name": "whitelistMintTime",
 						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_marketingWallet",
+						"type": "address"
 					}
 				],
 				"stateMutability": "nonpayable",
@@ -1174,11 +1179,11 @@
 			]
 		},
 		"contracts/BananaNFT.sol": {
-			"keccak256": "0xf9df9ec9465e96188ebb05fbdd98f89776e42a1f2a4ceae03281b5f2f980fc14",
+			"keccak256": "0x61b9d5fe8bcd0d4965f9db420d387612b96f64aae640556e8a29782f1895923d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6250155246a4dd8717976e3d676a39970b9afbb6f7f4da0caa6ad3914611cc30",
-				"dweb:/ipfs/QmZWTpPP6CuXxD3DprRub2yBRWLpZg5gap4LpkyVkB7MvW"
+				"bzz-raw://88c7e0a1076f7d0a098266bde4c274a04d0ca392377f9dcfb7f6760a5f633821",
+				"dweb:/ipfs/QmdrrYYwL4PHUMQQxGShkyEAv52d87b1QfHmXU8gP9MVqe"
 			]
 		}
 	},

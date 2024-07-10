@@ -15,6 +15,11 @@
 				"internalType": "uint256",
 				"name": "whitelistMintTime",
 				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_marketingWallet",
+				"type": "address"
 			}
 		],
 		"stateMutability": "nonpayable",

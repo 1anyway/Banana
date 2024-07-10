@@ -11,7 +11,7 @@ contract BananaNFTScript is Script {
         vm.broadcast();
         new BananaNFT(
             30,
-            IERC20(0x0D35548DBD3CC4583A77Be279d54a6Ebf4AEFFE6),
+            IERC20(0x338d96c13AC705B5915891358adF8f5E9b780d18),
             30,
             0xcC93A941713e1aA28aDe56a3DB6805F163B10C14
         );

@@ -15,6 +15,7 @@ contract BananaTokenTest is Test {
     address payable[] internal users;
     address internal alice;
     address internal bob;
+    address internal charlie;
 
     uint256 public bscTestnetFork;
     string public BNB_MAINNET_RPC_URL = vm.envString("BNB_MAINNET_RPC_URL");
@@ -30,7 +31,7 @@ contract BananaTokenTest is Test {
         alice = users[0];
         bob = users[1];
 
-        bananaToken = new BananaToken(1e28, address(this));
+        bananaToken = new BananaToken(0xcC93A941713e1aA28aDe56a3DB6805F163B10C14);
     }
 
     function test_BananaToken_Deployment() public view {
@@ -47,7 +48,6 @@ contract BananaTokenTest is Test {
             address(bananaToken.uniswapV2Router()),
             0x10ED43C718714eb63d5aA57B78B54704E256024E
         );
-        // assertEq(bananaToken.uniswapV2Pair(), address(0));
     }
 
     function test_transfer() public {

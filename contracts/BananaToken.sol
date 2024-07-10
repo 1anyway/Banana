@@ -10,9 +10,10 @@ import {IUniswapV2Factory} from "./interfaces/IUniswapV2Factory.sol";
 contract BananaToken is ERC20, Ownable {
     //BSC: 0x10ED43C718714eb63d5aA57B78B54704E256024E
     //MA: 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
+    //BSC testnet: 0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3
     address public constant DEAD = address(0xdead);
     address public constant UNISWAP_V2_ROUTER =
-        0x10ED43C718714eb63d5aA57B78B54704E256024E;
+        0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3;
 
     uint256 public taxRate = 5;
     IUniswapV2Router02 public immutable uniswapV2Router;
@@ -26,7 +27,6 @@ contract BananaToken is ERC20, Ownable {
     event ExcludeFromFees(address indexed account, bool isExcluded);
 
     constructor(
-        uint256 initialSupply,
         address _marketingWallet
     ) ERC20("BananaToken", "BANA") Ownable(msg.sender) {
         marketingWallet = _marketingWallet;
@@ -41,7 +41,7 @@ contract BananaToken is ERC20, Ownable {
         _isExcludedFromFees[DEAD] = true;
         _isExcludedFromFees[address(this)] = true;
 
-        _mint(msg.sender, initialSupply);
+        _mint(msg.sender, 21e27);
     }
 
     receive() external payable {}
@@ -79,7 +79,10 @@ contract BananaToken is ERC20, Ownable {
         address to,
         uint256 value
     ) public override returns (bool) {
-        if (!_isExcludedFromFees[from] && !_isExcludedFromFees[to]) {
+        if (
+            (!_isExcludedFromFees[from] && !_isExcludedFromFees[to]) &&
+            (msg.sender == uniswapV2Pair || to == uniswapV2Pair)
+        ) {
             _spendAllowance(from, msg.sender, value);
             _transferWithTax(from, to, value);
         } else {
@@ -101,11 +104,7 @@ contract BananaToken is ERC20, Ownable {
 
             bool canSwap = contractTokenBalance > 0;
 
-            if (
-                canSwap &&
-                !swapping &&
-                from != uniswapV2Pair
-            ) {
+            if (canSwap && !swapping && from != uniswapV2Pair) {
                 swapping = true;
 
                 address[] memory path = new address[](2);

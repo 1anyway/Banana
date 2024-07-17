@@ -11,8 +11,8 @@ contract BananaMarketplaceScript is Script {
     function run() public {
         vm.broadcast();
         new BananaMarketplace(
-            IERC20(0xF7276bA2f6895707fa6884EeF541D8d3Ce6e36f8),
-            BananaNFT(0x5F84ca9c5A1A6965A60279Cfa36949b5fE799DB7)
+            IERC20(0x91d38817206243F40b9C18c658EE9877E20dEC31),
+            BananaNFT(0x56986b8ac9B0306B7cA790Dcaa3f3f7A3204D2ef)
         );
     }
 }

@@ -21,7 +21,7 @@ contract BananaNFTTest is Test {
 
     uint256 public bscFork;
     string public BNB_MAINNET_RPC_URL = vm.envString("BNB_MAINNET_RPC_URL");
-    uint256 public constant blockNum = 20274555;
+    uint256 public constant blockNum = 40406990;
 
     uint256 public mintInterval;
     uint256 public whitelistMintTime;

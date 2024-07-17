@@ -9,9 +9,9 @@ contract BananaNFTScript is Script {
     function run() public {
         vm.broadcast();
         new BananaNFT(
-            30,
-            30,
-            0xbaE311B8d7ae35e5c261A5873acE96991c5573cD
+            2 hours,
+            24 hours,
+            0x162bcf6e6Fc11CE30b3a74aB5Bf6F6fab2D49ec1
         );
     }
 }

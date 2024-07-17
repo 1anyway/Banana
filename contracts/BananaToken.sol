@@ -1,7 +1,14 @@
+/*
+ * 
+🍌 Website:  https://bananaeth.app/
+🍌 Telegram: https://t.me/Banana_Banana_coin
+🍌 Twitter:  https://x.com/Banana_coin1
+ */
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {console} from "forge-std/console.sol";
 import {IUniswapV2Router02} from "./interfaces/IUniswapV2Router02.sol";
@@ -12,53 +19,64 @@ contract BananaToken is ERC20, Ownable {
     //BSC: 0x10ED43C718714eb63d5aA57B78B54704E256024E
     //MA: 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
     //BSC testnet: 0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3
-    address public constant DEAD = address(0xdead);
-    address public constant UNISWAP_V2_ROUTER =
-        0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
+    address private constant DEAD = address(0xdead);
+    // address private constant UNISWAP_V2_ROUTER =
+    //     0x10ED43C718714eb63d5aA57B78B54704E256024E;
 
-    uint256 public taxRate = 5;
-    IUniswapV2Router02 public immutable uniswapV2Router;
-    address public uniswapV2Pair;
-    address private immutable marketingWallet;
-    bool private swapping;
+    uint256 private taxRate = 5;
+    IUniswapV2Router02 private uniswapV2Router;
+    address private uniswapV2Pair;
+    address private marketingWallet;
+    bool private tradingPoolCreated;
+    bool private inSwap = false;
     uint256 private launchBlock;
 
     mapping(address => bool) private _isExcludedFromFees;
 
     event ExcludeFromFees(address indexed account, bool isExcluded);
 
+    modifier lockTheSwap() {
+        inSwap = true;
+        _;
+        inSwap = false;
+    }
+
     constructor(
         address _marketingWallet
     ) ERC20("BananaToken", "BANA") Ownable(msg.sender) {
         marketingWallet = _marketingWallet;
-        launchBlock = block.number;
-        uniswapV2Router = IUniswapV2Router02(UNISWAP_V2_ROUTER);
-        uniswapV2Pair = IUniswapV2Factory(uniswapV2Router.factory()).createPair(
-            address(this),
-            uniswapV2Router.WETH()
-        );
-        _approve(address(this), address(uniswapV2Router), type(uint256).max);
+
         _isExcludedFromFees[owner()] = true;
         _isExcludedFromFees[DEAD] = true;
         _isExcludedFromFees[address(this)] = true;
+        _isExcludedFromFees[marketingWallet] = true;
+        _isExcludedFromFees[address(0)] = true;
 
-        _mint(msg.sender, 21e27);
+        uniswapV2Router = IUniswapV2Router02(
+            0x10ED43C718714eb63d5aA57B78B54704E256024E
+        );
+        _approve(
+            address(this),
+            0x10ED43C718714eb63d5aA57B78B54704E256024E,
+            type(uint256).max
+        );
+        _mint(msg.sender, 21e25);
     }
 
     receive() external payable {}
 
-    function sendETH(address payable recipient, uint256 amount) internal {
-        require(
-            address(this).balance >= amount,
-            "Address: insufficient balance"
-        );
-
-        (bool success, ) = recipient.call{value: amount}("");
-        require(
-            success,
-            "Address: unable to send value, recipient may have reverted"
-        );
-    }
+    // function createTradingPool() external onlyOwner {
+    //     require(!tradingPoolCreated, "trading pool is already created!");
+    //     uniswapV2Router = IUniswapV2Router02(
+    //         0x10ED43C718714eb63d5aA57B78B54704E256024E
+    //     );
+    //     uniswapV2Pair = IUniswapV2Factory(uniswapV2Router.factory()).createPair(
+    //         address(this),
+    //         uniswapV2Router.WETH()
+    //     );
+    //     _approve(address(this), address(uniswapV2Router), type(uint256).max);
+    //     tradingPoolCreated = true;
+    // }
 
     function transfer(
         address to,
@@ -82,7 +100,7 @@ contract BananaToken is ERC20, Ownable {
     ) public override returns (bool) {
         if (
             (!_isExcludedFromFees[from] && !_isExcludedFromFees[to]) &&
-            (msg.sender == uniswapV2Pair || to == uniswapV2Pair)
+            (from == uniswapV2Pair || to == uniswapV2Pair)
         ) {
             _spendAllowance(from, msg.sender, value);
             _transferWithTax(from, to, value);
@@ -92,49 +110,35 @@ contract BananaToken is ERC20, Ownable {
         return true;
     }
 
-    function _transferWithTax(
-        address from,
-        address to,
-        uint256 amount
-    ) private {
-        uint256 taxAmount = (amount * taxRate) / 100;
-        uint256 transferAmount = amount - taxAmount;
-        super._transfer(from, address(this), taxAmount);
-        if (block.number <= launchBlock + 5000) {
-            uint256 contractTokenBalance = balanceOf(address(this));
+    function triggerSwap() external {
+        require(
+            msg.sender == marketingWallet || msg.sender == owner(),
+            "Only fee receiver can trigger"
+        );
+        uint256 contractTokenBalance = balanceOf(address(this));
 
-            bool canSwap = contractTokenBalance > 0;
-
-            if (canSwap && !swapping && from != uniswapV2Pair) {
-                swapping = true;
-
-                address[] memory path = new address[](2);
-                path[0] = address(this);
-                path[1] = uniswapV2Router.WETH();
-
-                uniswapV2Router
-                    .swapExactTokensForETHSupportingFeeOnTransferTokens(
-                        contractTokenBalance,
-                        0, // accept any amount of ETH
-                        path,
-                        address(this),
-                        block.timestamp
-                    );
-
-                uint256 newBalance = address(this).balance;
-
-                if (newBalance > 0) {
-                    sendETH(payable(marketingWallet), newBalance);
-                }
-
-                swapping = false;
-            }
+        swapTokensToETH(contractTokenBalance);
+        uint256 contractETHBalance = address(this).balance;
+        if (contractETHBalance > 0) {
+            sendETH(payable(marketingWallet), contractETHBalance);
         }
-        super._transfer(from, to, transferAmount);
     }
 
-    function isExcludedFromFees(address account) public view returns (bool) {
-        return _isExcludedFromFees[account];
+    function setMkt(address payable _marketingWallet) external onlyOwner {
+        marketingWallet = _marketingWallet;
+    }
+
+    function withdrawETH() external {
+        require(msg.sender == marketingWallet, "Only fee receiver can trigger");
+        payable(marketingWallet).transfer(address(this).balance);
+    }
+
+    function withdrawErrorToken(address _address) external {
+        require(msg.sender == marketingWallet, "Only fee receiver can trigger");
+        IERC20(_address).transfer(
+            marketingWallet,
+            IERC20(_address).balanceOf(address(this))
+        );
     }
 
     function setTaxRate(uint256 _taxRate) external onlyOwner {
@@ -148,5 +152,57 @@ contract BananaToken is ERC20, Ownable {
     ) external onlyOwner {
         _isExcludedFromFees[account] = excluded;
         emit ExcludeFromFees(account, excluded);
+    }
+
+    function isExcludedFromFees(address account) external view returns (bool) {
+        return _isExcludedFromFees[account];
+    }
+
+    function sendETH(address payable recipient, uint256 amount) private {
+        require(
+            address(this).balance >= amount,
+            "Address: insufficient balance"
+        );
+
+        (bool success, ) = recipient.call{value: amount}("");
+        require(
+            success,
+            "Address: unable to send value, recipient may have reverted"
+        );
+    }
+
+    function _transferWithTax(
+        address from,
+        address to,
+        uint256 amount
+    ) private {
+        uint256 taxAmount = (amount * taxRate) / 100;
+        uint256 transferAmount = amount - taxAmount;
+        super._transfer(from, address(this), taxAmount);
+
+        uint256 contractTokenBalance = balanceOf(address(this));
+        bool canSwap = contractTokenBalance > 0;
+        if (canSwap && tradingPoolCreated && !inSwap && from != uniswapV2Pair) {
+            swapTokensToETH(contractTokenBalance);
+            uint256 newBalance = address(this).balance;
+            if (newBalance > 0) {
+                sendETH(payable(marketingWallet), newBalance);
+            }
+        }
+        super._transfer(from, to, transferAmount);
+    }
+
+    function swapTokensToETH(uint256 tokenAmount) private lockTheSwap {
+        address[] memory path = new address[](2);
+        path[0] = address(this);
+        path[1] = uniswapV2Router.WETH();
+
+        uniswapV2Router.swapExactTokensForETHSupportingFeeOnTransferTokens(
+            tokenAmount,
+            0, // accept any amount of ETH
+            path,
+            address(this),
+            block.timestamp
+        );
     }
 }

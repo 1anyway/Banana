@@ -9,7 +9,7 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract BananaNFT is ERC721Enumerable, ReentrancyGuard, Ownable {
-    uint256 public mintPrice = 0.005 ether;
+    uint256 public mintPrice = 0.03 ether;
     uint256 public mintInterval;
     uint256 public endWhitelistMintTime;
     bool public _isSaleActive;

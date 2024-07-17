@@ -17,7 +17,7 @@ contract BananaNFTTest is Test {
 
     uint256 public bscFork;
     string public BNB_MAINNET_RPC_URL = vm.envString("BNB_MAINNET_RPC_URL");
-    uint256 public constant blockNum = 20274555;
+    uint256 public constant blockNum = 40406990;
 
     uint256 public mintInterval;
     uint256 public whitelistMintTime;
@@ -40,7 +40,7 @@ contract BananaNFTTest is Test {
     }
 
     function test_Deployment() public view {
-        assertEq(bananaNFT.mintPrice(), 0.005 ether);
+        assertEq(bananaNFT.mintPrice(), 0.03 ether);
         assertEq(bananaNFT.mintInterval(), mintInterval);
         assertFalse(bananaNFT._isSaleActive());
         assertEq(
@@ -162,13 +162,13 @@ contract BananaNFTTest is Test {
     }
 
     function test_setMintPrice() public {
-        assertEq(bananaNFT.mintPrice(), 5e15);
+        assertEq(bananaNFT.mintPrice(), 3e16);
         bananaNFT.setMintPrice(1e16);
         assertEq(bananaNFT.mintPrice(), 1e16);
     }
 
     function test_setMintPrice_NotOwnerCall_Fail() public {
-        assertEq(bananaNFT.mintPrice(), 5e15);
+        assertEq(bananaNFT.mintPrice(), 3e16);
         vm.prank(alice);
         vm.expectRevert(
             abi.encodeWithSignature(
@@ -177,6 +177,6 @@ contract BananaNFTTest is Test {
             )
         );
         bananaNFT.setMintPrice(1e16);
-        assertEq(bananaNFT.mintPrice(), 5e15);
+        assertEq(bananaNFT.mintPrice(), 3e16);
     }
 }
